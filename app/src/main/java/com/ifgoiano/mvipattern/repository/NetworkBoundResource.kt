@@ -59,4 +59,5 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType> {
     abstract fun createCall(): LiveData<GenericApiResponse<ResponseObject>>
 
     fun asLiveData() = result as LiveData<DataState<ViewStateType>>
+
 }

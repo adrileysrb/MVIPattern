@@ -45,6 +45,8 @@ class APIActivity : AppCompatActivity(), DataStateListener, MainRecyclerAdapter.
         initRecyclerView()
         subscribeObservers()
         triggerGetCountriesEvent()
+        //triggerGetFirebaseListEvent()
+
     }
 
     private fun initRecyclerView(){
@@ -89,6 +91,7 @@ class APIActivity : AppCompatActivity(), DataStateListener, MainRecyclerAdapter.
     fun triggerGetCountriesEvent(){
         viewModel.setStateEvent(MainStateEvent.GetCountriesEvent())
     }
+
 
     fun handleDataStateChange(dataState: DataState<*>?){
         dataState?.let{

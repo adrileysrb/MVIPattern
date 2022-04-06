@@ -4,7 +4,6 @@ sealed class MainStateEvent {
 
     class GetCountriesEvent: MainStateEvent()
 
-
     class None: MainStateEvent()
 
 
