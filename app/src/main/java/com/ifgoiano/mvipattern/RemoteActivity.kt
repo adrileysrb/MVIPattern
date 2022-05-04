@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ifgoiano.mvipattern.databinding.ActivityHomeBinding
+import com.ifgoiano.mvipattern.databinding.ActivityRemoteBinding
 import com.ifgoiano.mvipattern.model.Data
 import com.ifgoiano.mvipattern.remote.ProductAdapter
 import com.ifgoiano.mvipattern.remote.ProductViewModel
@@ -14,10 +17,6 @@ import com.ifgoiano.mvipattern.remote.ProductViewModel
 class RemoteActivity : AppCompatActivity(), ProductAdapter.OnItemClickListener {
 
     private lateinit var name: EditText
-    private lateinit var price: EditText
-    private lateinit var description: EditText
-    private lateinit var submit: Button
-    private lateinit var rvList: RecyclerView
 
     private lateinit var productAdapter: ProductAdapter
     private lateinit var list: ArrayList<Data>
@@ -25,15 +24,31 @@ class RemoteActivity : AppCompatActivity(), ProductAdapter.OnItemClickListener {
     private var selected: Data = Data()
 
     private val productViewModel: ProductViewModel by viewModels()
+    private lateinit var binding: ActivityRemoteBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_remote)
+        binding = ActivityRemoteBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setTitle("MVI Activity - REMOTE")
 
-        rvList = findViewById(R.id.rvList)
+        binding.refreshData2.setOnClickListener {
+            refreshData()
+        }
 
-        initElement()
-        initViewModel()
+        binding.insertData2.setOnClickListener {
+            inputDialog()
+        }
+
+        binding.deleteData2.setOnClickListener {
+            deleteDialog()
+        }
+
+        binding.updateData2.setOnClickListener {
+            updateDialog()
+        }
+
     }
 
     private fun initElement() {
@@ -63,21 +78,21 @@ class RemoteActivity : AppCompatActivity(), ProductAdapter.OnItemClickListener {
     private fun onCreate(it: Boolean) {
         if (it) {
             productViewModel.getList()
-            resetText()
+           // resetText()
         }
     }
 
     private fun onUpdate(it: Boolean) {
         if (it) {
             productViewModel.getList()
-            resetText()
+            //resetText()
         }
     }
 
     private fun onDelete(it: Boolean) {
         if (it) {
             productViewModel.getList()
-            resetText()
+            //resetText()
         }
     }
 
@@ -87,30 +102,10 @@ class RemoteActivity : AppCompatActivity(), ProductAdapter.OnItemClickListener {
 
         productAdapter = ProductAdapter(list, this)
 
-        rvList.adapter = productAdapter
-        rvList.layoutManager = LinearLayoutManager(baseContext)
+        binding.listFirebase.adapter = productAdapter
+        binding.listFirebase.layoutManager = LinearLayoutManager(baseContext)
 
         productAdapter.notifyDataSetChanged()
-    }
-
-    private fun create() {
-        val product = Data(
-            selected.id,
-            name.text.toString()
-        )
-        if (product.id != null) {
-            productViewModel.update(product)
-        } else {
-            productViewModel.create(product)
-        }
-    }
-
-    private fun resetText() {
-        selected = Data()
-
-        name.text = null
-        price.text = null
-        description.text = null
     }
 
     override fun onClick(item: Data, position: Int) {
@@ -120,5 +115,65 @@ class RemoteActivity : AppCompatActivity(), ProductAdapter.OnItemClickListener {
 
     override fun onDelete(item: Data, position: Int) {
         productViewModel.delete(item.id!!)
+    }
+
+    fun deleteDialog(){
+        var al = AlertDialog.Builder(this)
+        var view = layoutInflater.inflate(R.layout.delete_dialog, null)
+        al.setView(view)
+        val id_input = view.findViewById<EditText>(R.id.id_input)
+        var delete_btn = view.findViewById<Button>(R.id.delete_btn)
+        val alertDialog =  al.show()
+
+        delete_btn.setOnClickListener { v ->
+            run {
+                productViewModel.delete(id_input.text.toString())
+                alertDialog.dismiss()
+                refreshData()
+            }
+        }
+    }
+
+    fun inputDialog(){
+        var al = AlertDialog.Builder(this)
+        var view = layoutInflater.inflate(R.layout.insert_dialog, null)
+        al.setView(view)
+        val name = view.findViewById<EditText>(R.id.name)
+        var insert_btn = view.findViewById<Button>(R.id.insert_btn)
+        val alertDialog =  al.show()
+
+        insert_btn.setOnClickListener { v ->
+            run {
+                var data = Data()
+                data.name = name.text.toString()
+                productViewModel.create(data)
+                alertDialog.dismiss()
+                refreshData()
+            }
+        }
+    }
+
+    fun updateDialog(){
+        var al = AlertDialog.Builder(this)
+        var view = layoutInflater.inflate(R.layout.insert_dialog, null)
+        al.setView(view)
+        val name = view.findViewById<EditText>(R.id.name)
+        var insert_btn = view.findViewById<Button>(R.id.insert_btn)
+        val alertDialog =  al.show()
+
+        insert_btn.setOnClickListener { v ->
+            run {
+                var data = Data()
+                data.name = name.text.toString()
+                productViewModel.create(data)
+                alertDialog.dismiss()
+                refreshData()
+            }
+        }
+    }
+
+    fun refreshData(){
+        initElement()
+        initViewModel()
     }
 }

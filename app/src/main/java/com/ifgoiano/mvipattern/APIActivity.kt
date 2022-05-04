@@ -27,8 +27,8 @@ class APIActivity : AppCompatActivity(), DataStateListener, MainRecyclerAdapter.
     private val TAG: String = "AppDebug"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("TIMESYSTEM", System.currentTimeMillis().toString())
         super.onCreate(savedInstanceState)
-        Log.d("ADRILEY", System.currentTimeMillis().toString())
         binding = ActivityApiactivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -117,7 +117,7 @@ class APIActivity : AppCompatActivity(), DataStateListener, MainRecyclerAdapter.
         }
         else{
             binding.progress.visibility = View.INVISIBLE
-            Log.d("ADRILEY", System.currentTimeMillis().toString())
+            Log.d("TIMESYSTEM", System.currentTimeMillis().toString())
         }
     }
 

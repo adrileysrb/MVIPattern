@@ -1,10 +1,7 @@
 package com.ifgoiano.mvipattern.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.ifgoiano.mvipattern.api.MyRetrofitBuilder
-import com.ifgoiano.mvipattern.firebase.Firebase
 import com.ifgoiano.mvipattern.model.Data
 import com.ifgoiano.mvipattern.ui.main.state.MainViewState
 import com.ifgoiano.mvipattern.util.*
